@@ -14,8 +14,8 @@ import android.net.Uri;
 import android.text.Html;
 import android.util.Log;
 
-import 	java.util.ArrayList;
-import 	java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.File;
 import java.util.HashMap;
 
@@ -87,7 +87,7 @@ public class FlutterMailerPlugin implements MethodCallHandler {
             File file = new File(path);
             Uri p = Uri.fromFile(file);
             i.putExtra(Intent.EXTRA_STREAM, p);
-            
+
         }
       }
     }

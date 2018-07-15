@@ -5,7 +5,7 @@
 **based off of [react-native-mail](https://github.com/chirag04/react-native-mail)**
 
 - [x] android
-- [ ] ios
+- [x] ios - _work in progress_. 
 
 ```dart
     final MailOptions mailOptions = MailOptions(

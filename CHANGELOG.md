@@ -1,3 +1,6 @@
+## 0.0.3
+* fix homepage spelling mistake in pubspec
+
 ## 0.0.2
 
 * add initial ios support

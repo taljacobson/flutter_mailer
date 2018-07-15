@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(new MyApp());
 
@@ -21,6 +22,11 @@ class _MyAppState extends State<MyApp> {
   final GlobalKey<ScaffoldState> _scafoldKey = new GlobalKey<ScaffoldState>();
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> send() async {
+    //  final file = await _localFile;
+  
+    // await file.writeAsString('hello world');
+    
+    // attachment.add(file);
     // Platform messages may fail, so we use a try/catch PlatformException.
     final MailOptions mailOptions = MailOptions(
       body: _bodyController.text,
@@ -32,13 +38,11 @@ class _MyAppState extends State<MyApp> {
       attachments: attachment,
     );
 
-    String platformResponse;
+    String platformResponse; 
 
     try {
       await FlutterMailer.send(mailOptions);
       platformResponse = 'success';
-    } on PlatformException {
-      platformResponse = 'Failed to get platform version.';
     } catch (error) {
       platformResponse = error.toString();
     }
@@ -50,6 +54,17 @@ class _MyAppState extends State<MyApp> {
     _scafoldKey.currentState.showSnackBar(SnackBar(
       content: Text(platformResponse),
     ));
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    
+    return directory.path;
   }
 
   @override

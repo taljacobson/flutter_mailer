@@ -44,7 +44,8 @@ public class FlutterMailerPlugin implements MethodCallHandler {
 
   private void mail(MethodCall  options, Result callback) {
     Context context = mRegistrar.context();
-    Intent i = new Intent(Intent.ACTION_SENDTO);
+    Intent i = new Intent();
+
     i.setData(Uri.parse("mailto:"));
 
     if (options.hasArgument("subject")) {
@@ -80,17 +81,29 @@ public class FlutterMailerPlugin implements MethodCallHandler {
 
     if (options.hasArgument("attachments")) {
       ArrayList<String> attachments  = options.argument("attachments");
-      if (attachments != null && !attachments.isEmpty()) {
-
+      if (attachments != null && !attachments.isEmpty() && attachments.size() > 1) {
+        ArrayList<Uri> uris   = new ArrayList<Uri>();
         for (int j = 0; j < attachments.size(); j++) {
           final String path = attachments.get(j);
             File file = new File(path);
             Uri p = Uri.fromFile(file);
-            i.putExtra(Intent.EXTRA_STREAM, p);
+            uris.add(p);
+//            i.putExtra(Intent.EXTRA_STREAM, p);
 
         }
-      }
+        i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        i.setAction(Intent.ACTION_SEND_MULTIPLE);
+      } else if (attachments.size() == 1) {
+        final String path = attachments.get(0);
+         File file = new File(path);
+         Uri p = Uri.fromFile(file);
+         i.putExtra(Intent.EXTRA_STREAM, p);
+         i.setAction((Intent.ACTION_SENDTO));
+        }
+    } else {
+        i.setAction((Intent.ACTION_SENDTO));
     }
+
 
     PackageManager manager = context.getPackageManager();
     List<ResolveInfo> list = manager.queryIntentActivities(i, 0);
@@ -108,10 +121,12 @@ public class FlutterMailerPlugin implements MethodCallHandler {
         callback.error("error", ex.getMessage(), null);
       }
     } else {
+
       Intent chooser = Intent.createChooser(i, "Send Mail");
       chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
       try {
+
         context.startActivity(chooser);
         callback.success(null);
       } catch (Exception ex) {

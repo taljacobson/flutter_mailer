@@ -1,5 +1,5 @@
 # flutter_mailer
-
+[![pub package](https://img.shields.io/pub/v/flutter_mailer.svg)](https://pub.dartlang.org/packages/flutter_mailer)
 #### Share an email to device Email Client - supports multiple Attachments
 
 **based off of [react-native-mail](https://github.com/chirag04/react-native-mail)**

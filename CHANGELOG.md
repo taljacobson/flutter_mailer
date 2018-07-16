@@ -1,3 +1,6 @@
+## 0.0.4
+ * change attachment type from `List<File>` to `List<String>`. 
+
 ## 0.0.3
 * fix homepage spelling mistake in pubspec
 

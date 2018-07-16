@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(new MyApp());
 
@@ -16,17 +14,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<File> attachment = [];
-  TextEditingController _subjectController = new TextEditingController();
-  TextEditingController _bodyController = new TextEditingController();
+  List<String> attachment = [];
+  TextEditingController _subjectController = new TextEditingController(text: 'the Subject');
+  TextEditingController _bodyController = new TextEditingController(text: """
+  <em>the body has <code>HTML</code></em> <br><br><br>
+  <strong>Some Apps like Gmail might ignore it</strong>
+  """);
   final GlobalKey<ScaffoldState> _scafoldKey = new GlobalKey<ScaffoldState>();
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> send() async {
-    //  final file = await _localFile;
-  
-    // await file.writeAsString('hello world');
-    
-    // attachment.add(file);
     // Platform messages may fail, so we use a try/catch PlatformException.
     final MailOptions mailOptions = MailOptions(
       body: _bodyController.text,
@@ -56,21 +52,11 @@ class _MyAppState extends State<MyApp> {
     ));
   }
 
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
-  }
-
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    
-    return directory.path;
-  }
 
   @override
   Widget build(BuildContext context) {
     final Widget imagePath = Column(
-        children: attachment.map((file) => Text('${file.path}')).toList());
+        children: attachment.map((file) => Text('$file')).toList());
 
     return new MaterialApp(
       theme: ThemeData(primaryColor: Colors.red),
@@ -131,7 +117,7 @@ class _MyAppState extends State<MyApp> {
   void _picker() async {
     File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      attachment.add(pick);
+      attachment.add(pick.path);
     });
   }
 }

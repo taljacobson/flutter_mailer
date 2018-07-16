@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -18,7 +17,7 @@ class MailOptions {
   final List<String> bccRecipients;
   final String body; // '<b>A Bold Body</b>',
   final bool isHTML; // true
-  final List<File> attachments;
+  final List<String> attachments;
   MailOptions(
       {this.subject = '',
       this.recipients = const [],
@@ -39,8 +38,8 @@ class MailOptions {
     };
     if (attachments != null && attachments.isNotEmpty) {
       List<String> paths = <String>[];
-      for (File path in attachments) {
-        paths.add(path.path);
+      for (String path in attachments) {
+        paths.add(path);
       }
 
       map["attachments"] = paths;

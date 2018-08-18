@@ -1,3 +1,6 @@
+## 0.1.0
+  * remove the need to edit `androidManifest.xml` for file sharing
+
 ## 0.0.4
  * change attachment type from `List<File>` to `List<String>`. 
 

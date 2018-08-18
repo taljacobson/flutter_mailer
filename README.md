@@ -27,31 +27,14 @@
 
 ## Getting Started
 
-# Android setup
-this plugin uses FileProvider for android
-if you are using a conflicting plugin such as `image_picker` you'll need to edit your applications `AndroidManifest.xml` file with the following.
+just add it to your pubspec dependencies; like so 
 
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.company.appId"
-  xmlns:tools="http://schemas.android.com/tools" <!--  add this --> 
-  >
-  ....
-  <application 
-  ....
-  >
-  <!-- vv   add this   vv  -->
-  <provider 
-    tools:replace="android:authorities"
-    android:authorities="${applicationId}.adv_provider"
-    android:name="android.support.v4.content.FileProvider" >
-    <meta-data
-        tools:replace="android:resource"
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/flutter_mailer_paths"
-        />
-  </provider>
-  ...
+```
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_mailer: ^0.0.5
+
 ```
 
 For help getting started with Flutter, view our online

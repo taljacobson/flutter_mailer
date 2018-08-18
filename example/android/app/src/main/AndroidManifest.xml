@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dataxad.fluttermailerexample"
-    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <!-- The INTERNET permission is required for development. Specifically,
@@ -18,16 +17,6 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="flutter_mailer_example"
         android:icon="@mipmap/ic_launcher">
-        <provider
-            tools:replace="android:authorities"
-            android:authorities="${applicationId}.adv_provider"
-            android:name="android.support.v4.content.FileProvider" >
-             <meta-data
-                tools:replace="android:resource"
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/flutter_mailer_paths"
-                />
-        </provider>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

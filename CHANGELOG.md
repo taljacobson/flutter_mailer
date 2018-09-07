@@ -1,3 +1,6 @@
+## 0.1.1
+  * update android dependencies
+
 ## 0.1.0
   * remove the need to edit `androidManifest.xml` for file sharing
 

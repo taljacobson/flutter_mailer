@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(new MyApp());
 
@@ -15,7 +16,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List<String> attachment = [];
-  TextEditingController _subjectController = new TextEditingController(text: 'the Subject');
+  TextEditingController _subjectController =
+      new TextEditingController(text: 'the Subject');
   TextEditingController _bodyController = new TextEditingController(text: """
   <em>the body has <code>HTML</code></em> <br><br><br>
   <strong>Some Apps like Gmail might ignore it</strong>
@@ -34,7 +36,7 @@ class _MyAppState extends State<MyApp> {
       attachments: attachment,
     );
 
-    String platformResponse; 
+    String platformResponse;
 
     try {
       await FlutterMailer.send(mailOptions);
@@ -52,11 +54,10 @@ class _MyAppState extends State<MyApp> {
     ));
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final Widget imagePath = Column(
-        children: attachment.map((file) => Text('$file')).toList());
+    final Widget imagePath =
+        Column(children: attachment.map((file) => Text('$file')).toList());
 
     return new MaterialApp(
       theme: ThemeData(primaryColor: Colors.red),
@@ -110,6 +111,24 @@ class _MyAppState extends State<MyApp> {
           label: Text('Add Image'),
           onPressed: _picker,
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        bottomNavigationBar: BottomAppBar(
+          notchMargin: 4.0,
+          // shape: CircularNotchedRectangle(),
+          // color: Theme.of(context).primaryColor,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Builder(
+                builder: (context) => FlatButton(
+                      textColor: Theme.of(context).primaryColor,
+                      child: Text('add text File'),
+                      onPressed: () => _onCreateFile(context),
+                    ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -120,4 +139,84 @@ class _MyAppState extends State<MyApp> {
       attachment.add(pick.path);
     });
   }
+
+  /// create a text file in Temporary Directory to share.
+  _onCreateFile(BuildContext context) async {
+    final TempFile tempFile = await _showDialog(context);
+    final File newFile = await writeFile(tempFile.content, tempFile.name);
+    setState(() {
+      attachment.add(newFile.path);
+    });
+  }
+
+  /// some A simple dialog and return fileName and content
+  Future<TempFile> _showDialog(BuildContext context) {
+    return showDialog<TempFile>(
+      context: context,
+      builder: (context) {
+        String content = '';
+        String fileName = '';
+
+        return SimpleDialog(
+          title: Text('write something to a file'),
+          contentPadding: EdgeInsets.all(8.0),
+          children: <Widget>[
+            TextField(
+              onChanged: (str) => fileName = str,
+              autofocus: true,
+              decoration: InputDecoration(
+                  suffix: Text('.txt'),
+                  labelText: 'file name'),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hasFloatingPlaceholder: true,
+                labelText: 'Content',
+              ),
+              onChanged: (str) => content = str,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  child: Icon(Icons.save),
+                  onPressed: () {
+                    TempFile tempFile = TempFile(content: content, name: fileName);
+                    // Map.from({'content': content, 'fileName': fileName});
+                    Navigator.of(context).pop<TempFile>(tempFile);
+                  },
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getTemporaryDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> _localFile(String fileName) async {
+    final path = await _localPath;
+    return File('$path/$fileName.txt');
+  }
+
+  Future<File> writeFile(String text, [String fileName = '']) async {
+    fileName = fileName.isNotEmpty ? fileName : 'fileName';
+    final file = await _localFile(fileName);
+
+    // Write the file
+    return file.writeAsString('$text');
+  }
+}
+
+class TempFile {
+  final String name, content;
+
+  TempFile({this.name, this.content});
 }

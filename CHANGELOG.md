@@ -1,3 +1,7 @@
+## 0.1.2
+  * minor change in android
+  * expand example with temp file upload
+
 ## 0.1.1
   * update android dependencies
 

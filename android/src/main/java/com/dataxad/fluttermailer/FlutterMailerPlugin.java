@@ -114,9 +114,9 @@ public class FlutterMailerPlugin implements MethodCallHandler {
 
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE)
                         .setType("message/rfc822")
-                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        .putExtra(Intent.EXTRA_STREAM, uris);
-                 if (attachments.size() == 1) {
+                        .putExtra(Intent.EXTRA_STREAM, uris)
+                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                if (attachments.size() == 1) {
 
                     intent.setAction(Intent.ACTION_SEND)
                             .putExtra(Intent.EXTRA_STREAM, uris.get(0));

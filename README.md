@@ -33,7 +33,7 @@ just add it to your pubspec dependencies; like so
 dependencies:
   flutter:
     sdk: flutter
-  flutter_mailer: ^0.1.0
+  flutter_mailer: ^0.2.0
 
 ```
 

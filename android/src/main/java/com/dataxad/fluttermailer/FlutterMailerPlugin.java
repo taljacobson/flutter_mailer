@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 
 import java.io.File;
@@ -23,7 +25,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  * FlutterMailerPlugin
  */
 public class FlutterMailerPlugin implements MethodCallHandler {
-    private static final String ISHTML = "isHTML";
+    private static final String IS_HTML = "isHTML";
     private static final String SUBJECT = "subject";
     private static final String BODY = "body";
     private static final String RECIPIENTS = "recipients";
@@ -31,6 +33,7 @@ public class FlutterMailerPlugin implements MethodCallHandler {
     private static final String BCCRecipients = "bccRecipients";
     private static final String ATTACHMENTS = "attachments";
     private static final String MAILTO_SCHEME = "mailto:";
+    private static final String APP_SCHEMA = "appSchema";
     private final Registrar mRegistrar;
 
     /**
@@ -63,36 +66,39 @@ public class FlutterMailerPlugin implements MethodCallHandler {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if (options.hasArgument(SUBJECT)) {
-            String subject = options.argument(SUBJECT);
-            intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+            String subject = options.argument(SUBJECT) ;
+            intent.putExtra(Intent.EXTRA_SUBJECT, subject != null ? subject : "");
         }
 
         if (options.hasArgument(BODY)) {
             final String body = options.argument(BODY);
-            final CharSequence text = options.argument(ISHTML) ? Html.fromHtml(body) : body;
+            CharSequence text =  body != null ? body: "" ;
+
+            if (options.hasArgument(IS_HTML) && (boolean)options.argument(IS_HTML)) {
+                text = fromHtml((String) text);
+            }
             intent.putExtra(Intent.EXTRA_TEXT, text);
 
         }
         if (options.hasArgument(RECIPIENTS)) {
             ArrayList<String> recipients = options.argument(RECIPIENTS);
-            final String[] r = readableArrayToStringArray(recipients);
+            final String[] r = readableArrayToStringArray(recipients != null ? recipients : new ArrayList<String>());
             intent.putExtra(Intent.EXTRA_EMAIL, r);
         }
 
         if (options.hasArgument(CCRecipients)) {
             ArrayList<String> ccRecipients = options.argument(CCRecipients);
-            final String[] r = readableArrayToStringArray(ccRecipients);
+            final String[] r = readableArrayToStringArray( ccRecipients != null ? ccRecipients : new ArrayList<String>() );
             intent.putExtra(Intent.EXTRA_CC, r);
         }
 
         if (options.hasArgument(BCCRecipients)) {
             ArrayList<String> bccRecipients = options.argument(BCCRecipients);
-            final String[] r = readableArrayToStringArray(bccRecipients);
+            final String[] r = readableArrayToStringArray(bccRecipients != null ? bccRecipients : new ArrayList<String>());
             intent.putExtra(Intent.EXTRA_BCC, r);
         }
 
         if (options.hasArgument(ATTACHMENTS)) {
-            Log.i("fl", "" + options.argument(ATTACHMENTS));
             ArrayList<String> attachments = options.argument(ATTACHMENTS);
             if (attachments == null) {
                 callback.error("Attachments_null", "Attachments cannot be null", null);
@@ -108,7 +114,6 @@ public class FlutterMailerPlugin implements MethodCallHandler {
                     File file = new File(path);
 
                     final Uri p = FileProvider.getUriForFile(context, mRegistrar.context().getPackageName() + ".adv_provider", file);
-                    Log.w("Flutter_mailer:", p.toString());
                     uris.add(p);
                 }
 
@@ -142,6 +147,17 @@ public class FlutterMailerPlugin implements MethodCallHandler {
                 Log.e("Flutter_mailer Size==1", ex.getMessage());
                 callback.error("error", ex.getMessage(), null);
             }
+        } else if (options.hasArgument(APP_SCHEMA) && options.argument(APP_SCHEMA) != null && isAppInstalled((String) options.argument(APP_SCHEMA)) ) {
+
+            try {
+                intent.setPackage((String)options.argument(APP_SCHEMA));
+                context.startActivity(intent);
+                callback.success(null);
+            } catch (Exception ex) {
+                Log.e("Flutter_mailer ERROR: ", ex.getMessage());
+                callback.error("error", ex.getMessage(), null);
+            }
+
         } else {
 
             Intent chooser = Intent.createChooser(intent, "Send Mail");
@@ -173,5 +189,31 @@ public class FlutterMailerPlugin implements MethodCallHandler {
         }
 
         return strArray;
+    }
+
+
+    /**
+     * Ask the package manager if the app is installed on the device.
+     *
+     * @param id    The app id.
+     * @return      true if yes otherwise false.
+     */
+    private boolean isAppInstalled (String id) {
+
+        try {
+            mRegistrar.activeContext().getPackageManager().getPackageInfo(id, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String source) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(source);
+        }
     }
 }

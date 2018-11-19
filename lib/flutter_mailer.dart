@@ -11,21 +11,49 @@ class FlutterMailer {
 }
 
 class MailOptions {
+  static const String GMAIL = 'com.google.android.gm';
+
+  /// Email Subject field
   final String subject;
+
+  /// List of primary Recipients for the email
   final List<String> recipients;
+
+  /// List of Carbon copy Recipents
   final List<String> ccRecipients;
+
+  /// List of Blind carbon copy Recipents
   final List<String> bccRecipients;
-  final String body; // '<b>A Bold Body</b>',
-  final bool isHTML; // true
+
+  /// Email body field
+  final String body;
+
+  final bool isHTML;
+
+  /// List of attachment file path
   final List<String> attachments;
-  MailOptions(
-      {this.subject = '',
-      this.recipients = const [],
-      this.ccRecipients = const [],
-      this.bccRecipients = const [],
-      this.body = '',
-      this.attachments,
-      this.isHTML = false});
+
+  /// define a specific Email App to open
+  ///
+  /// this can be used to step over App choser sheet when sending an email with attachments.
+  /// 
+  /// for Gmail on android `com.google.android.gm` or by `MailOptions.GMAIL` 
+  /// 
+  /// _android only_
+  final String appSchema;
+  MailOptions({
+    this.subject = '',
+    this.recipients = const [],
+    this.ccRecipients = const [],
+    this.bccRecipients = const [],
+    this.body = '',
+    this.attachments,
+    this.isHTML = false,
+    this.appSchema,
+  })  : assert(recipients != null),
+        assert(ccRecipients != null),
+        assert(bccRecipients != null),
+        assert(isHTML != null);
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
@@ -35,7 +63,12 @@ class MailOptions {
       "ccRecipients": ccRecipients,
       "bccRecipients": bccRecipients,
       "isHTML": isHTML,
+      "appSchema": appSchema,
     };
+    if (appSchema != null && appSchema.isNotEmpty) {
+      map["appSchema"] = appSchema;
+    }
+
     if (attachments != null && attachments.isNotEmpty) {
       List<String> paths = <String>[];
       for (String path in attachments) {

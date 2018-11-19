@@ -1,3 +1,8 @@
+## 0.2.0
+  * add `appSchema` prop to `MailOptions` for by passing choser and picking specific app. _android only_
+  * add comments
+  * android null checks
+
 ## 0.1.2
   * minor change in android
   * expand example with temp file upload

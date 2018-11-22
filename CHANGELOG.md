@@ -1,3 +1,7 @@
+## 0.3.0
+  * android - change to use "just once/always" menu instead of choser.
+  _this is a super small change but changes the flow, hence it's not a patch._
+
 ## 0.2.0
   * add `appSchema` prop to `MailOptions` for by passing choser and picking specific app. _android only_
   * add comments

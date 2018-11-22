@@ -160,12 +160,12 @@ public class FlutterMailerPlugin implements MethodCallHandler {
 
         } else {
 
-            Intent chooser = Intent.createChooser(intent, "Send Mail");
-            chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // Intent chooser = Intent.createChooser(intent, "Send Mail");
+            // chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             try {
-
-                context.startActivity(chooser);
+                context.startActivity(intent);
+                // context.startActivity(chooser);
                 callback.success(null);
             } catch (Exception ex) {
                 Log.e("Flutter_mailer ERROR: ", ex.getMessage());
@@ -209,7 +209,7 @@ public class FlutterMailerPlugin implements MethodCallHandler {
     }
 
     @SuppressWarnings("deprecation")
-    public static Spanned fromHtml(String source) {
+    private static Spanned fromHtml(String source) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
         } else {

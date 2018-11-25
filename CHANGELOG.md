@@ -1,3 +1,8 @@
+## 0.3.1
+ * ios warning fixes
+ * fix crash when attachment has unknow mimeType
+ * display full file name with extention.
+
 ## 0.3.0
   * android - change to use "just once/always" menu instead of choser.
   _this is a super small change but changes the flow, hence it's not a patch._

@@ -36,16 +36,16 @@ class MailOptions {
   /// define a specific Email App to open
   ///
   /// this can be used to step over App choser sheet when sending an email with attachments.
-  /// 
-  /// for Gmail on android `com.google.android.gm` or by `MailOptions.GMAIL` 
-  /// 
+  ///
+  /// for Gmail on android `com.google.android.gm` or by `MailOptions.GMAIL`
+  ///
   /// _android only_
   final String appSchema;
   MailOptions({
     this.subject = '',
-    this.recipients = const [],
-    this.ccRecipients = const [],
-    this.bccRecipients = const [],
+    this.recipients = const <String>[],
+    this.ccRecipients = const <String>[],
+    this.bccRecipients = const <String>[],
     this.body = '',
     this.attachments,
     this.isHTML = false,
@@ -56,26 +56,28 @@ class MailOptions {
         assert(isHTML != null);
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> map = {
-      "subject": subject,
-      "body": body,
-      "recipients": recipients,
-      "ccRecipients": ccRecipients,
-      "bccRecipients": bccRecipients,
-      "isHTML": isHTML,
-      "appSchema": appSchema,
+    final Map<String, dynamic> map = <String, dynamic>{
+      'subject': subject,
+      'body': body,
+      'recipients': recipients,
+      'ccRecipients': ccRecipients,
+      'bccRecipients': bccRecipients,
+      'isHTML': isHTML,
+      'appSchema': appSchema,
     };
     if (appSchema != null && appSchema.isNotEmpty) {
-      map["appSchema"] = appSchema;
+      map['appSchema'] = appSchema;
     }
 
     if (attachments != null && attachments.isNotEmpty) {
-      List<String> paths = <String>[];
+      final List<String> paths = <String>[];
       for (String path in attachments) {
-        paths.add(path);
+        if (path != null && path.isNotEmpty) {
+          paths.add(path);
+        }
       }
 
-      map["attachments"] = paths;
+      map['attachments'] = paths;
     }
 
     return map;

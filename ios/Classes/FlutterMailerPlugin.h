@@ -1,4 +1,6 @@
 #import <Flutter/Flutter.h>
 
-@interface FlutterMailerPlugin : NSObject<FlutterPlugin>
+#import <MessageUI/MFMailComposeViewController.h>
+
+@interface FlutterMailerPlugin : NSObject<FlutterPlugin, MFMailComposeViewControllerDelegate>
 @end

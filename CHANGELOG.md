@@ -1,3 +1,7 @@
+## 0.4.0+1
+
+* Set Android `compileSdkVersion` to 28 in order to prevent build errors with AndroidX.
+
 ## 0.4.0
 
 * **Breaking change**. Migrate from the deprecated original Android Support

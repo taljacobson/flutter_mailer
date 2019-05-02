@@ -123,7 +123,9 @@
             [root presentViewController:mail animated:YES completion:nil];
             result(nil);
         } else {
-            result(@[@"not_available"]);
+            result([FlutterError errorWithCode:@"UNAVAILABLE"
+                                 message:@"defualt mail app not available"
+                                 details:nil]);
         }
         
     } else {

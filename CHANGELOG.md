@@ -1,3 +1,7 @@
+## 0.4.1
+
+* return platform error if no mail app available in ios
+
 ## 0.4.0+1
 
 * Set Android `compileSdkVersion` to 28 in order to prevent build errors with AndroidX.

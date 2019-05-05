@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,9 +15,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List<String> attachment = <String>[];
-  TextEditingController _subjectController =
+  final TextEditingController _subjectController =
       TextEditingController(text: 'the Subject');
-  TextEditingController _bodyController = TextEditingController(
+  final TextEditingController _bodyController = TextEditingController(
       text: '''  <em>the body has <code>HTML</code></em> <br><br><br>
   <strong>Some Apps like Gmail might ignore it</strong>
   ''');
@@ -40,6 +40,32 @@ class _MyAppState extends State<MyApp> {
     try {
       await FlutterMailer.send(mailOptions);
       platformResponse = 'success';
+    } on PlatformException catch (error) {
+      platformResponse = error.toString();
+      print(error);
+      if (!mounted){ 
+        return;
+        }
+      await showDialog<void>(
+          context: _scafoldKey.currentContext,
+          builder: (BuildContext context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                content: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Message',
+                      style: Theme.of(context).textTheme.subhead,
+                    ),
+                    Text(error.message),
+                  ],
+                ),
+                contentPadding: const EdgeInsets.all(26),
+                title: Text(error.code),
+              ));
     } catch (error) {
       platformResponse = error.toString();
     }
@@ -47,7 +73,9 @@ class _MyAppState extends State<MyApp> {
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
-    if (!mounted) return;
+    if (!mounted){ 
+      return;
+    }
     _scafoldKey.currentState.showSnackBar(SnackBar(
       content: Text(platformResponse),
     ));

@@ -16,9 +16,8 @@ void main() {
 
     // Verify that platform version is retrieved.
     expect(
-        find.byWidgetPredicate(
-          (Widget widget) =>
-              widget is Text && widget.data.startsWith('Running on:'),
+        find.widgetWithText(
+          FloatingActionButton, 'Add Image',
         ),
         findsOneWidget);
   });

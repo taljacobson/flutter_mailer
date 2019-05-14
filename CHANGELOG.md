@@ -1,3 +1,7 @@
+## 0.4.1+1
+
+* replace androidx appcompat with core dependency for simpler classpath
+
 ## 0.4.1
 
 * return platform error if no mail app available in ios

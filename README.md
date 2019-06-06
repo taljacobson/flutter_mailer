@@ -11,7 +11,7 @@ Simple & quick plugin for cross application data sharing of email fields in mobi
 ## Supports:
 
 - [x] android
-- [x] ios - _work in progress_.
+- [x] ios
 
 ## Getting Started
 
@@ -21,7 +21,7 @@ Add to your pubspec dependencies, like so:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_mailer: ^0.3.0
+  flutter_mailer: ^0.4.1+1
 
 ```
 Instantiate mail options as [follows](https://github.com/JaysQubeXon/flutter_mailer/blob/master/example/lib/main.dart#L29):

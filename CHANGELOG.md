@@ -1,3 +1,7 @@
+## 0.4.1+2
+
+* fix typo in ios `UNAVAILABLE` return
+
 ## 0.4.1+1
 
 * replace androidx appcompat with core dependency for simpler classpath

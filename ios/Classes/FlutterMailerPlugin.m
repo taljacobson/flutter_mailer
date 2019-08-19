@@ -124,7 +124,7 @@
             result(nil);
         } else {
             result([FlutterError errorWithCode:@"UNAVAILABLE"
-                                 message:@"defualt mail app not available"
+                                 message:@"default mail app not available"
                                  details:nil]);
         }
         

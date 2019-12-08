@@ -74,7 +74,7 @@ public class FlutterMailerPlugin implements MethodCallHandler, PluginRegistry.Ac
         Intent intent = new Intent(Intent.ACTION_SENDTO,
                 Uri.parse(MAILTO_SCHEME));
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if (options.hasArgument(SUBJECT)) {
             String subject = options.argument(SUBJECT) ;
@@ -150,7 +150,7 @@ public class FlutterMailerPlugin implements MethodCallHandler, PluginRegistry.Ac
         }
 
         if (list.size() == 1) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mResult = callback;
             try {
                 mActivty.startActivityForResult(intent, MAIL_ACTIVTY_REQUEST_CODE);

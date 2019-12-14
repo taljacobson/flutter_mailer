@@ -1,3 +1,8 @@
+## 0.4.2
+
+* [Androind] return `send` future when app is returned to. 
+
+
 ## 0.4.1+2
 
 * fix typo in ios `UNAVAILABLE` return

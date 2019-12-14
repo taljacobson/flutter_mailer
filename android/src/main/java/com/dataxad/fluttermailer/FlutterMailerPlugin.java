@@ -1,5 +1,6 @@
 package com.dataxad.fluttermailer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,16 +16,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * FlutterMailerPlugin
  */
-public class FlutterMailerPlugin implements MethodCallHandler {
+public class FlutterMailerPlugin implements MethodCallHandler, PluginRegistry.ActivityResultListener {
     private static final String IS_HTML = "isHTML";
     private static final String SUBJECT = "subject";
     private static final String BODY = "body";
@@ -36,12 +40,18 @@ public class FlutterMailerPlugin implements MethodCallHandler {
     private static final String APP_SCHEMA = "appSchema";
     private final Registrar mRegistrar;
 
+    private Result mResult;
+    private Activity mActivty;
+    private static final int MAIL_ACTIVTY_REQUEST_CODE = 564;
+
     /**
      * Plugin registration.
      */
     public static void registerWith(Registrar registrar) {
         final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_mailer");
-        channel.setMethodCallHandler(new FlutterMailerPlugin(registrar));
+        FlutterMailerPlugin plugin = new FlutterMailerPlugin(registrar);
+        channel.setMethodCallHandler(plugin);
+        registrar.addActivityResultListener(plugin);
     }
 
     @Override
@@ -55,6 +65,7 @@ public class FlutterMailerPlugin implements MethodCallHandler {
 
     private FlutterMailerPlugin(Registrar registrar) {
         this.mRegistrar = registrar;
+        this.mActivty = registrar.activity();
     }
 
 
@@ -63,7 +74,7 @@ public class FlutterMailerPlugin implements MethodCallHandler {
         Intent intent = new Intent(Intent.ACTION_SENDTO,
                 Uri.parse(MAILTO_SCHEME));
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if (options.hasArgument(SUBJECT)) {
             String subject = options.argument(SUBJECT) ;
@@ -139,20 +150,19 @@ public class FlutterMailerPlugin implements MethodCallHandler {
         }
 
         if (list.size() == 1) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mResult = callback;
             try {
-                context.startActivity(intent);
-                callback.success(null);
+                mActivty.startActivityForResult(intent, MAIL_ACTIVTY_REQUEST_CODE);
             } catch (Exception ex) {
                 Log.e("Flutter_mailer Size==1", ex.getMessage());
                 callback.error("error", ex.getMessage(), null);
             }
         } else if (options.hasArgument(APP_SCHEMA) && options.argument(APP_SCHEMA) != null && isAppInstalled((String) options.argument(APP_SCHEMA)) ) {
-
+            mResult = callback;
             try {
                 intent.setPackage((String)options.argument(APP_SCHEMA));
-                context.startActivity(intent);
-                callback.success(null);
+                mActivty.startActivityForResult(intent, MAIL_ACTIVTY_REQUEST_CODE);
             } catch (Exception ex) {
                 Log.e("Flutter_mailer ERROR: ", ex.getMessage());
                 callback.error("error", ex.getMessage(), null);
@@ -162,11 +172,11 @@ public class FlutterMailerPlugin implements MethodCallHandler {
 
             // Intent chooser = Intent.createChooser(intent, "Send Mail");
             // chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mResult = callback;
+
 
             try {
-                context.startActivity(intent);
-                // context.startActivity(chooser);
-                callback.success(null);
+                mActivty.startActivityForResult(intent, MAIL_ACTIVTY_REQUEST_CODE);
             } catch (Exception ex) {
                 Log.e("Flutter_mailer ERROR: ", ex.getMessage());
                 callback.error("error", ex.getMessage(), null);
@@ -216,4 +226,14 @@ public class FlutterMailerPlugin implements MethodCallHandler {
             return Html.fromHtml(source);
         }
     }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if(requestCode == MAIL_ACTIVTY_REQUEST_CODE && mResult != null){
+            mResult.success(null);
+            return false;
+        }
+        return false;
+    }
+
 }

@@ -27,17 +27,23 @@ dependencies:
 Instantiate mail options as [follows](https://github.com/JaysQubeXon/flutter_mailer/blob/master/example/lib/main.dart#L29):
 
 ```dart
-    final MailOptions mailOptions = MailOptions(
-      body: 'a long body for the email <br> with a subset of HTML',
-      subject: 'the Email Subject',
-      recipients: ['example@example.com'],
-      isHTML: true,
-      bccRecipients: ['other@example.com'],
-      ccRecipients: ['third@example.com'],
-      attachments: [ 'path/to/image.png', ],
-    );
+import 'package:flutter_mailer/flutter_mailer.dart';
 
-    await FlutterMailer.send(mailOptions);
+...
+...
+
+final MailOptions mailOptions = MailOptions(
+  body: 'a long body for the email <br> with a subset of HTML',
+  subject: 'the Email Subject',
+  recipients: ['example@example.com'],
+  isHTML: true,
+  bccRecipients: ['other@example.com'],
+  ccRecipients: ['third@example.com'],
+  attachments: [ 'path/to/image.png', ],
+);
+
+await FlutterMailer.send(mailOptions);
+
 ```
 
 **note** _gmail_ and other apps Might parse HTML out of the body.

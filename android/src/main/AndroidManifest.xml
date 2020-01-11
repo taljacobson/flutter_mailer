@@ -2,7 +2,7 @@
   package="com.dataxad.fluttermailer">
     <application>
         <provider
-            android:name="com.dataxad.fluttermailer.FlutterMailerFileProvider"
+            android:name="com.dataxad.flutter_mailer.FlutterMailerFileProvider"
             android:authorities="${applicationId}.adv_provider"
             android:exported="false"
             android:grantUriPermissions="true">

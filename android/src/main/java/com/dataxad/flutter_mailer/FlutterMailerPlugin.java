@@ -55,7 +55,7 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), FLUTTER_MAILER);
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), FLUTTER_MAILER);
         channel.setMethodCallHandler(new FlutterMailerPlugin());
 
         context = flutterPluginBinding.getApplicationContext();
@@ -91,6 +91,9 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        context = null;
+        channel.setMethodCallHandler(null);
+        channel = null;
     }
 
 

@@ -44,7 +44,7 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
     private static final String ATTACHMENTS = "attachments";
     private static final String MAILTO_SCHEME = "mailto:";
     private static final String APP_SCHEMA = "appSchema";
-    private static final int MAIL_ACTIVTY_REQUEST_CODE = 564;
+    private static final int MAIL_ACTIVITY_REQUEST_CODE = 564;
 
     private Context context;
     private Result mResult;
@@ -181,7 +181,7 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mResult = callback;
             try {
-                mActivity.startActivityForResult(intent, MAIL_ACTIVTY_REQUEST_CODE);
+                mActivity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
             } catch (Exception ex) {
                 Log.e("Flutter_mailer Size==1", ex.getMessage());
                 callback.error("error", ex.getMessage(), null);
@@ -190,7 +190,7 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
             mResult = callback;
             try {
                 intent.setPackage((String) options.argument(APP_SCHEMA));
-                mActivity.startActivityForResult(intent, MAIL_ACTIVTY_REQUEST_CODE);
+                mActivity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
             } catch (Exception ex) {
                 Log.e("Flutter_mailer ERROR: ", ex.getMessage());
                 callback.error("error", ex.getMessage(), null);
@@ -204,7 +204,7 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
 
 
             try {
-                mActivity.startActivityForResult(intent, MAIL_ACTIVTY_REQUEST_CODE);
+                mActivity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
             } catch (Exception ex) {
                 Log.e("Flutter_mailer ERROR: ", ex.getMessage());
                 callback.error("error", ex.getMessage(), null);
@@ -284,7 +284,7 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == MAIL_ACTIVTY_REQUEST_CODE && mResult != null) {
+        if (requestCode == MAIL_ACTIVITY_REQUEST_CODE && mResult != null) {
             mResult.success(null);
             return false;
         }

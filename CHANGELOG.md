@@ -1,3 +1,6 @@
+## 5.0.0
+* [Androind] Compatibility with Flutters Android Embedding V2
+
 ## 0.4.2
 
 * [Androind] return `send` future when app is returned to. 

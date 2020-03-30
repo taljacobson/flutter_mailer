@@ -1,4 +1,4 @@
-group 'com.dataxad.fluttermailer'
+group 'com.dataxad.flutter_mailer'
 version '1.0-SNAPSHOT'
 
 buildscript {

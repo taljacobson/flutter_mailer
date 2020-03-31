@@ -75,7 +75,7 @@ public class FlutterMailerPlugin implements FlutterPlugin, MethodCallHandler, Ac
         final MethodChannel channel = new MethodChannel(registrar.messenger(), FLUTTER_MAILER);
 
         FlutterMailerPlugin plugin = new FlutterMailerPlugin();
-
+        plugin.context = registrar.context();
         registrar.addActivityResultListener(plugin);
         channel.setMethodCallHandler(plugin);
     }

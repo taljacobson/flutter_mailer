@@ -14,6 +14,7 @@ import android.text.Spanned;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 import io.flutter.plugin.common.MethodCall;
@@ -25,7 +26,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRegistry.ActivityResultListener {
+   static class FlutterMailerException extends Exception {
+        final String errorMessage;
+        final Object errorDetails;
+        final String errorCode;
 
+        FlutterMailerException(String errorCode, @Nullable String errorMessage, @Nullable Object errorDetails) {
+            super();
+            this.errorCode = errorCode;
+            this.errorMessage = errorMessage;
+            this.errorDetails = errorDetails;
+        }
+    }
+
+    private static final String TAG = "FLUTTER_MAILER";
     private static final String IS_HTML = "isHTML";
     private static final String SUBJECT = "subject";
     private static final String BODY = "body";
@@ -41,7 +55,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
     private Activity activity;
     private MethodChannel.Result mResult;
 
-    MethodCallHandlerImpl(Context context, Activity activity) {
+    MethodCallHandlerImpl(@NonNull Context context, @Nullable Activity activity) {
         this.context = context;
         this.activity = activity;
     }
@@ -53,7 +67,18 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if (call.method.equals("send")) {
-            mail(call, result);
+            mResult = result;
+            try {
+                final Intent intent = mail(call);
+                activity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
+            } catch (FlutterMailerException e) {
+                result.error(e.errorCode, e.errorMessage, e.errorDetails);
+                mResult = null;
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                result.error("UNKNOWN", e.getMessage(), null);
+                mResult = null;
+            }
         } else {
             result.notImplemented();
         }
@@ -68,7 +93,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
         return false;
     }
 
-    private void mail(MethodCall options, MethodChannel.Result callback) {
+
+    private Intent mail(MethodCall options) throws FlutterMailerException {
 
         Intent intent = new Intent(Intent.ACTION_SENDTO,
                 Uri.parse(MAILTO_SCHEME));
@@ -111,14 +137,12 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
         if (options.hasArgument(ATTACHMENTS)) {
             ArrayList<String> attachments = options.argument(ATTACHMENTS);
             if (attachments == null) {
-                callback.error("Attachments_null", "Attachments cannot be null", null);
+                throw new FlutterMailerException("Attachments_null", "Attachments cannot be null", null);
             } else if (!attachments.isEmpty()) {
                 ArrayList<Uri> uris = new ArrayList<>();
 
-
                 for (int j = 0; j < attachments.size(); j++) {
                     final String path = attachments.get(j);
-
 
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     File file = new File(path);
@@ -143,44 +167,17 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
         List<ResolveInfo> list = manager.queryIntentActivities(intent, 0);
 
         if (list == null || list.size() == 0) {
-            Log.e("Flutter_mailer ERROR: ", "size is null or Zero");
-            callback.error("not_available", "no email Managers available", null);
-            return;
+            Log.e(TAG, "size is null or Zero");
+            throw new FlutterMailerException("not_available", "no email Managers available", null);
         }
 
         if (list.size() == 1) {
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mResult = callback;
-            try {
-                activity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
-            } catch (Exception ex) {
-                Log.e("Flutter_mailer Size==1", ex.getMessage());
-                callback.error("error", ex.getMessage(), null);
-            }
+            return intent;
         } else if (options.hasArgument(APP_SCHEMA) && options.argument(APP_SCHEMA) != null && isAppInstalled((String) options.argument(APP_SCHEMA))) {
-            mResult = callback;
-            try {
-                intent.setPackage((String) options.argument(APP_SCHEMA));
-                activity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
-            } catch (Exception ex) {
-                Log.e("Flutter_mailer ERROR: ", ex.getMessage());
-                callback.error("error", ex.getMessage(), null);
-            }
-
-        } else {
-
-            // Intent chooser = Intent.createChooser(intent, "Send Mail");
-            // chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mResult = callback;
-
-
-            try {
-                activity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
-            } catch (Exception ex) {
-                Log.e("Flutter_mailer ERROR: ", ex.getMessage());
-                callback.error("error", ex.getMessage(), null);
-            }
+            intent.setPackage((String) options.argument(APP_SCHEMA));
+            return intent;
         }
+        return intent;
     }
 
     /**

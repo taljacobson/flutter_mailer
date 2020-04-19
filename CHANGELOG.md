@@ -1,5 +1,7 @@
 ## 5.0.0
-* [Androind] Compatibility with Flutters Android Embedding V2
+* [Android] Compatibility with Flutters Android Embedding V2
+* [Android] expose `isAppInstalled` java method to dart - use this when passing a custom app schema.
+* [IOS] expose `MFMailComposeViewController canSendMail` method - default mail app availablity. 
 
 
 ## 0.4.3

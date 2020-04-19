@@ -155,11 +155,6 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
                         .setType("message/rfc822")
                         .putExtra(Intent.EXTRA_STREAM, uris)
                         .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                if (attachments.size() == 1) {
-
-                    intent.setAction(Intent.ACTION_SEND)
-                            .putExtra(Intent.EXTRA_STREAM, uris.get(0));
-                }
             }
         }
 

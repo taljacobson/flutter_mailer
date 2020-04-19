@@ -1,6 +1,11 @@
 ## 5.0.0
 * [Androind] Compatibility with Flutters Android Embedding V2
 
+
+## 0.4.3
+
+* [Androind] remove unneeded check for attachment size [PR 23](https://github.com/taljacobson/flutter_mailer/pull/23). 
+
 ## 0.4.2
 
 * [Androind] return `send` future when app is returned to. 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -7,6 +8,17 @@ class FlutterMailer {
 
   static Future<void> send(MailOptions mailOptions) async {
     return _channel.invokeMethod('send', mailOptions.toJson());
+  }
+
+  /// returns true if an app schema is installed on the device
+  /// other wise returns false
+  /// 
+  /// ### _Android only_
+  static Future<bool> isAppInstalled(String schema) async {
+    if(Platform.isAndroid) {
+      return _channel.invokeMethod('isAppInstalled', { "appSchema": schema });
+    }
+    return false;
   }
 }
 

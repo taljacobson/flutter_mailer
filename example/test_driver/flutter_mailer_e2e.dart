@@ -12,4 +12,10 @@ import 'package:e2e/e2e.dart';
 
      expect(send, completes);
    }, skip: true);
+
+   testWidgets('isAppInstalled', (WidgetTester tester) async {
+     final send = await FlutterMailer.isAppInstalled('com.empty.app');
+
+     expect(send, false);
+   });
  }

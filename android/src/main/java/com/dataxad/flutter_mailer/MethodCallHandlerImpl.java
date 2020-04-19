@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRegistry.ActivityResultListener {
-   static class FlutterMailerException extends Exception {
+    static class FlutterMailerException extends Exception {
         final String errorMessage;
         final Object errorDetails;
         final String errorCode;
@@ -78,6 +78,12 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
                 Log.e(TAG, e.getMessage());
                 result.error("UNKNOWN", e.getMessage(), null);
                 mResult = null;
+            }
+        } else if (call.method.equals("isAppInstalled")) {
+            if (call.hasArgument(APP_SCHEMA) && call.argument(APP_SCHEMA) != null && isAppInstalled((String) call.argument(APP_SCHEMA))) {
+                result.success(true);
+            } else {
+                result.success(false);
             }
         } else {
             result.notImplemented();

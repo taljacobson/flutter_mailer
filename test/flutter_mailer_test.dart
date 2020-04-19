@@ -9,7 +9,14 @@ void main() {
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
+      switch (methodCall.method) {
+        case 'send':
+          return null;
+        case 'isAppInstalled':
+          return true;
+        default:
+          return null;
+      }
     });
   });
 
@@ -17,13 +24,19 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  // test('send', () async {
-  //   final MailOptions mailOptions = MailOptions(
-  //     subject: "Subject",
-  //     body: "Body",
-  //     recipients: ["example@domain.com"]
-  //   );
+  test('send', () async {
+    final MailOptions mailOptions = MailOptions(
+      subject: "Subject",
+      body: "Body",
+      recipients: ["example@domain.com"]
+    );
 
-  //   expect(await FlutterMailer.send(mailOptions), true);
-  // });
+    expect(FlutterMailer.send(mailOptions), completes);
+  });
+
+  
+  test('isAppInstalled', () async {
+
+    expect(FlutterMailer.isAppInstalled('com.empty'), completes);
+  });
 }

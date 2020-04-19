@@ -26,9 +26,9 @@ void main() {
 
   test('send', () async {
     final MailOptions mailOptions = MailOptions(
-      subject: "Subject",
-      body: "Body",
-      recipients: ["example@domain.com"]
+      subject: 'Subject',
+      body: 'Body',
+      recipients: <String>['example@domain.com']
     );
 
     expect(FlutterMailer.send(mailOptions), completes);

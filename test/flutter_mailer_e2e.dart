@@ -7,7 +7,7 @@ import 'package:e2e/e2e.dart';
 
    testWidgets('Can get battery level', (WidgetTester tester) async {
      final MailOptions mailOptions = MailOptions();
-     final send = FlutterMailer.send(mailOptions);
+     final Future<void> send = FlutterMailer.send(mailOptions);
 
      expect(send, completes);
    });

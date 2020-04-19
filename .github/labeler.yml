@@ -7,10 +7,10 @@ lib:
 example:
   - example/**/*
 
-android:
+Android:
  - android/**/*
 
-ios:
+IOS:
   - ios/**/*
 
 test:

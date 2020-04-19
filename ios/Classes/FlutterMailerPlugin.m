@@ -130,9 +130,9 @@
         
     } else if ([@"canSendMail" isEqualToString:method]) {
         if ([MFMailComposeViewController canSendMail]) {
-            result(true);
+            result(@(YES));
         } else {
-            result(false);
+            result(@(NO));
         }
     } else {
         result(FlutterMethodNotImplemented);

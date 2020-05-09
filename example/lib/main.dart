@@ -24,6 +24,15 @@ class _MyAppState extends State<MyApp> {
   final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> send() async {
+    if(Platform.isIOS) {
+      final bool canSend = await FlutterMailer.canSendMail();
+      if(!canSend) {
+        const SnackBar snackbar = const SnackBar(content: Text('no Email App Available'));
+        _scafoldKey.currentState.showSnackBar(snackbar);
+        return;
+      }
+    }
+
     // Platform messages may fail, so we use a try/catch PlatformException.
     final MailOptions mailOptions = MailOptions(
       body: _bodyController.text,

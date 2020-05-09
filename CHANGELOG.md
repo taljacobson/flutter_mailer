@@ -1,3 +1,9 @@
+## 5.0.0
+* [Android] Compatibility with Flutters Android Embedding V2
+* [Android] expose `isAppInstalled` java method to dart - use this when passing a custom app schema.
+* [IOS] expose `MFMailComposeViewController canSendMail` method - default mail app availablity. 
+
+
 ## 0.4.3
 
 * [Androind] remove unneeded check for attachment size [PR 23](https://github.com/taljacobson/flutter_mailer/pull/23). 

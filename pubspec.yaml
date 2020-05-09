@@ -1,7 +1,6 @@
 name: flutter_mailer
 description: Share an email to device Email - Client supports multiple Attachments
-version: 0.4.3
-author: Tal Jaconson <tal1989@gmail.com>
+version: 0.5.0-dev.7
 homepage:  https://github.com/taljacobson/flutter_mailer
 
 dependencies:
@@ -13,12 +12,19 @@ dev_dependencies:
     sdk: flutter
   image_picker: ^0.6.6+1
   path_provider: ^1.6.7
+  e2e: ^0.4.0
+  flutter_driver:
+    sdk: flutter
 
 flutter:
   plugin:
-    androidPackage: com.dataxad.fluttermailer
-    pluginClass: FlutterMailerPlugin
+    platforms:
+      android:
+        package: com.dataxad.flutter_mailer
+        pluginClass: FlutterMailerPlugin
+      ios:
+        pluginClass: FlutterMailerPlugin
 
 environment:
   sdk: ">=2.0.0-dev.28.0 <3.0.0"
-  flutter: ">=0.1.4 <2.0.0"
+  flutter: ">=1.12.13+hotfix.6 <2.0.0"

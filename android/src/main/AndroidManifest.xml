@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.dataxad.fluttermailer">
+  package="com.dataxad.flutter_mailer">
     <application>
         <provider
-            android:name="com.dataxad.fluttermailer.FlutterMailerFileProvider"
+            android:name="com.dataxad.flutter_mailer.FlutterMailerFileProvider"
             android:authorities="${applicationId}.adv_provider"
             android:exported="false"
             android:grantUriPermissions="true">

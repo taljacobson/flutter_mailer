@@ -1,4 +1,4 @@
-package com.dataxad.fluttermailer;
+package com.dataxad.flutter_mailer;
 
 import androidx.core.content.FileProvider;
 

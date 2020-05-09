@@ -17,7 +17,8 @@ void main() {
     // Verify that platform version is retrieved.
     expect(
         find.widgetWithText(
-          FloatingActionButton, 'Add Image',
+          FloatingActionButton,
+          'Add Image',
         ),
         findsOneWidget);
   });

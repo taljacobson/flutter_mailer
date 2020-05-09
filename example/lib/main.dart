@@ -52,9 +52,9 @@ class _MyAppState extends State<MyApp> {
     } on PlatformException catch (error) {
       platformResponse = error.toString();
       print(error);
-      if (!mounted){ 
+      if (!mounted) {
         return;
-        }
+      }
       await showDialog<void>(
           context: _scafoldKey.currentContext,
           builder: (BuildContext context) => AlertDialog(
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
                   children: <Widget>[
                     Text(
                       'Message',
-                      style: Theme.of(context).textTheme.subhead,
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                     Text(error.message),
                   ],
@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
-    if (!mounted){ 
+    if (!mounted) {
       return;
     }
     _scafoldKey.currentState.showSnackBar(SnackBar(
@@ -157,10 +157,10 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               Builder(
                 builder: (BuildContext context) => FlatButton(
-                      textColor: Theme.of(context).primaryColor,
-                      child: const Text('add text File'),
-                      onPressed: () => _onCreateFile(context),
-                    ),
+                  textColor: Theme.of(context).primaryColor,
+                  child: const Text('add text File'),
+                  onPressed: () => _onCreateFile(context),
+                ),
               )
             ],
           ),
@@ -205,7 +205,7 @@ class _MyAppState extends State<MyApp> {
             ),
             TextField(
               decoration: const InputDecoration(
-                hasFloatingPlaceholder: true,
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
                 labelText: 'Content',
               ),
               onChanged: (String str) => content = str,

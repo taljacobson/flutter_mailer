@@ -1,0 +1,20 @@
+repo:
+  - ./*
+
+lib:
+  - lib/**/*
+
+example:
+  - example/**/*
+
+Android:
+ - android/**/*
+
+IOS:
+  - ios/**/*
+
+test:
+  - test/**/*
+  - test_driver/**/*
+  - example/test/**/*
+  - example/test_driver/**/*

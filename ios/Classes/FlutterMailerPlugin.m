@@ -3,6 +3,8 @@
 #import <MessageUI/MessageUI.h>
 
 @implementation FlutterMailerPlugin
+static FlutterResult flutterResult;
+    
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel = [FlutterMethodChannel
                                      methodChannelWithName:@"flutter_mailer"
@@ -12,6 +14,7 @@
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    flutterResult = result;
     NSString *method = call.method;
     if ([@"send" isEqualToString:method]) {
         // result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
@@ -121,7 +124,6 @@
                 root = root.presentedViewController;
             }
             [root presentViewController:mail animated:YES completion:nil];
-            result(nil);
         } else {
             result([FlutterError errorWithCode:@"UNAVAILABLE"
                                  message:@"default mail app not available"
@@ -172,6 +174,7 @@
     while (ctrl.presentedViewController && ctrl != controller) {
         ctrl = ctrl.presentedViewController;
     }
+    flutterResult(nil);
     [ctrl dismissViewControllerAnimated:YES completion:nil];
 }
 

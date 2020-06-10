@@ -1,3 +1,10 @@
+## 0.6.0
+
+* _*[breaking change]*_ `send` method will now return a `Future<MailerResponse>`, #20<br/>
+  this should not really be breaking since it used to return a `Future<void>` and its response would just be ignored.<br/> 
+  on [ios] uses [mfmailcomposeresult](https://developer.apple.com/documentation/messageui/mfmailcomposeresult), on android returns `android`.
+* [IOS] fix discrepancy, between android and ios, where `send` future would return immediately #26;
+
 ## 0.5.0
 
 * [Android] Compatibility with Flutters Android Embedding V2

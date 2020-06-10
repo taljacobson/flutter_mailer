@@ -26,17 +26,14 @@ void main() {
 
   test('send', () async {
     final MailOptions mailOptions = MailOptions(
-      subject: 'Subject',
-      body: 'Body',
-      recipients: <String>['example@domain.com']
-    );
+        subject: 'Subject',
+        body: 'Body',
+        recipients: <String>['example@domain.com']);
 
     expect(FlutterMailer.send(mailOptions), completes);
   });
 
-  
   test('isAppInstalled', () async {
-
     expect(FlutterMailer.isAppInstalled('com.empty'), completes);
   });
 }

@@ -1,3 +1,8 @@
+## 0.5.1-dev.2
+
+* [ios] `send` returns after didFinishWithResult finishes.
+
+
 ## 0.5.0
 
 * [Android] Compatibility with Flutters Android Embedding V2

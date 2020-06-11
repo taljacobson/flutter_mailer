@@ -174,7 +174,9 @@ static FlutterResult flutterResult;
     while (ctrl.presentedViewController && ctrl != controller) {
         ctrl = ctrl.presentedViewController;
     }
-    flutterResult(nil);
+    if (flutterResult) {
+        flutterResult(nil);    
+    }
     [ctrl dismissViewControllerAnimated:YES completion:nil];
 }
 

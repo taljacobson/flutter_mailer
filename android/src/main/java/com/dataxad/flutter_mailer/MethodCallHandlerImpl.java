@@ -93,7 +93,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == MAIL_ACTIVITY_REQUEST_CODE && mResult != null) {
-            mResult.success(null);
+            mResult.success("android");
             return false;
         }
         return false;
@@ -105,7 +105,6 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
         Intent intent = new Intent(Intent.ACTION_SENDTO,
                 Uri.parse(MAILTO_SCHEME));
 
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if (options.hasArgument(SUBJECT)) {
             String subject = options.argument(SUBJECT);

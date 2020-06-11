@@ -21,7 +21,7 @@ Add to your pubspec dependencies, like so:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_mailer: ^0.4.1+1
+  flutter_mailer: ^0.6.0
 
 ```
 Instantiate mail options as [follows](https://github.com/JaysQubeXon/flutter_mailer/blob/master/example/lib/main.dart#L29):
@@ -42,7 +42,24 @@ final MailOptions mailOptions = MailOptions(
   attachments: [ 'path/to/image.png', ],
 );
 
-await FlutterMailer.send(mailOptions);
+final MailerResponse response = await FlutterMailer.send(mailOptions);
+switch (response) {
+  case MailerResponse.saved: /// ios only
+    platformResponse = 'mail was saved to draft';
+    break;
+  case MailerResponse.sent: /// ios only
+    platformResponse = 'mail was sent';
+    break;
+  case MailerResponse.cancelled: /// ios only
+    platformResponse = 'mail was cancelled';
+    break;
+  case MailerResponse.android:
+    platformResponse = 'intent was successful';
+    break;
+  default:
+    platformResponse = 'unknown';
+    break;
+}
 
 ```
 

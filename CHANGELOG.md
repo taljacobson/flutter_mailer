@@ -1,6 +1,6 @@
-## 0.5.1-dev.2
+## 0.5.1
 
-* [ios] `send` returns after didFinishWithResult finishes.
+* [ios] fix discrepancy, between android and ios, where `send` future would return immediately #26
 
 
 ## 0.5.0

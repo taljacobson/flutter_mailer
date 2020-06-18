@@ -20,7 +20,8 @@ class FlutterMailer {
       return false;
     }
 
-    return _channel.invokeMethod('isAppInstalled', <String, String> {'appSchema': schema});
+    return _channel
+        .invokeMethod('isAppInstalled', <String, String>{'appSchema': schema});
   }
 
   /// returns true if can MFMailComposeViewController canSendMail is true

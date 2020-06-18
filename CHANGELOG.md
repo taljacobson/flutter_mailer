@@ -5,9 +5,9 @@
   on [ios] uses [mfmailcomposeresult](https://developer.apple.com/documentation/messageui/mfmailcomposeresult), on android returns `android`.
 
 
-## 0.5.1-dev.2
+## 0.5.1
 
-* [IOS] fix discrepancy, between android and ios, where `send` future would return immediately #26
+* [ios] fix discrepancy, between android and ios, where `send` future would return immediately #26
 
 
 ## 0.5.0

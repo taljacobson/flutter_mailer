@@ -12,7 +12,8 @@ class FlutterMailer {
   static const MethodChannel _channel = const MethodChannel('flutter_mailer');
 
   static Future<MailerResponse> send(MailOptions mailOptions) async {
-    final response = await _channel.invokeMethod('send', mailOptions.toJson());
+    final dynamic response =
+        await _channel.invokeMethod<dynamic>('send', mailOptions.toJson());
 
     return _sendPlatformResponse(response);
   }

@@ -31,6 +31,7 @@ class MailOptions {
   ///
   /// _android only_
   final String appSchema;
+  // ignore: sort_constructors_first
   MailOptions({
     this.subject = '',
     this.recipients = const <String>[],

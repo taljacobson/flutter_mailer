@@ -116,15 +116,15 @@ class _MyAppState extends State<MyApp> {
       mainAxisSpacing: 6,
       crossAxisCount: 2,
       shrinkWrap: true,
-      children: List.generate(
+      children: List<Widget>.generate(
         attachment.length,
-        (index) {
-          final file = File(attachment[index]);
+        (int index) {
+          final File file = File(attachment[index]);
           return GridTile(
             key: Key(attachment[index]),
             footer: GridTileBar(
               title: Text(
-                file.path.split("/")?.last,
+                file.path.split('/')?.last,
                 textAlign: TextAlign.justify,
               ),
             ),
@@ -156,13 +156,13 @@ class _MyAppState extends State<MyApp> {
                     borderRadius: BorderRadius.circular(59),
                     type: MaterialType.transparency,
                     child: IconButton(
-                      tooltip: "remove",
+                      tooltip: 'remove',
                       onPressed: () {
                         setState(() {
                           attachment.removeAt(index);
                         });
                       },
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       visualDensity: VisualDensity.compact,
                       icon: Icon(
                         Icons.clear,
@@ -254,7 +254,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _picker() async {
-    final File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final PickedFile pick =
+        await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       attachment.add(pick.path);
     });

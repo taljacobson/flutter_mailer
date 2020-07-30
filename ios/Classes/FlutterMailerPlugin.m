@@ -168,6 +168,7 @@ static FlutterResult flutterResult;
             default:
                 flutterResult(@"unknown");
                 break;
+         }
     } else {
         NSLog(@"No callback registered for mail: %@", controller.title);
     }

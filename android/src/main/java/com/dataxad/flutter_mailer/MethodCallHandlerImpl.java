@@ -118,8 +118,12 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
 
             if (options.hasArgument(IS_HTML) && (boolean) options.argument(IS_HTML)) {
                 text = fromHtml((String) text);
+                // Outlook and other apps will get body from EXTRA_HTML_TEXT
+                intent.putExtra(Intent.EXTRA_HTML_TEXT, text);
             }
-            intent.putExtra(Intent.EXTRA_TEXT, text);
+            else {
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+            }
 
         }
         if (options.hasArgument(RECIPIENTS)) {

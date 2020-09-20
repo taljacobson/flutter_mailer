@@ -5,8 +5,8 @@ version: 0.0.1+01
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.6.6+1
-  path_provider: ^1.6.7
+  image_picker: ^0.6.7+9
+  path_provider: ^1.6.16
   flutter_mailer:
     path: ../
 
@@ -17,7 +17,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  e2e: ^0.4.0
+  e2e: ^0.7.0
   flutter_driver:
     sdk: flutter
 

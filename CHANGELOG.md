@@ -1,4 +1,4 @@
-## 0.6.0
+## 1.0.0
 
 * _*[breaking change]*_ `send` method will now return a `Future<MailerResponse>`, #20<br/>
   this should not really be breaking since it used to return a `Future<void>` and its response would just be ignored.<br/> 

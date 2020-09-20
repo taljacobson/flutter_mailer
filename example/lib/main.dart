@@ -6,11 +6,11 @@ import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => new _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -48,8 +48,24 @@ class _MyAppState extends State<MyApp> {
     String platformResponse;
 
     try {
-      await FlutterMailer.send(mailOptions);
-      platformResponse = 'success';
+      final MailerResponse response = await FlutterMailer.send(mailOptions);
+      switch (response) {
+        case MailerResponse.saved:
+          platformResponse = 'mail was saved to draft';
+          break;
+        case MailerResponse.sent:
+          platformResponse = 'mail was sent';
+          break;
+        case MailerResponse.cancelled:
+          platformResponse = 'mail was cancelled';
+          break;
+        case MailerResponse.android:
+          platformResponse = 'intent was success';
+          break;
+        default:
+          platformResponse = 'unknown';
+          break;
+      }
     } on PlatformException catch (error) {
       platformResponse = error.toString();
       print(error);
@@ -93,15 +109,82 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget imagePath = Column(
-        children: attachment.map((String file) => Text('$file')).toList());
+    final Widget imagePath = GridView.count(
+      primary: false,
+      scrollDirection: Axis.vertical,
+      crossAxisSpacing: 6,
+      mainAxisSpacing: 6,
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      children: List<Widget>.generate(
+        attachment.length,
+        (int index) {
+          final File file = File(attachment[index]);
+          return GridTile(
+            key: Key(attachment[index]),
+            footer: GridTileBar(
+              title: Text(
+                file.path.split('/')?.last,
+                textAlign: TextAlign.justify,
+              ),
+            ),
+            child: Stack(
+              fit: StackFit.passthrough,
+              children: <Widget>[
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).accentColor,
+                      ),
+                      child: Image.file(
+                        File(attachment[index]),
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Icon(
+                          Icons.attachment,
+                          size: 50,
+                          color: Theme.of(context).primaryIconTheme.color,
+                        ),
+                      ),
+                    )),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(59),
+                    type: MaterialType.transparency,
+                    child: IconButton(
+                      tooltip: 'remove',
+                      onPressed: () {
+                        setState(() {
+                          attachment.removeAt(index);
+                        });
+                      },
+                      padding: const EdgeInsets.all(10),
+                      visualDensity: VisualDensity.compact,
+                      icon: Icon(
+                        Icons.clear,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
 
-    return new MaterialApp(
+    return MaterialApp(
       theme: ThemeData(primaryColor: Colors.red),
-      home: new Scaffold(
+      home: Scaffold(
         key: _scafoldKey,
-        appBar: new AppBar(
-          title: const Text('Plugin example app'),
+        appBar: AppBar(
+          title: const Text('Flutter Mailer Example'),
           actions: <Widget>[
             IconButton(
               onPressed: send,
@@ -110,7 +193,7 @@ class _MyAppState extends State<MyApp> {
           ],
         ),
         body: SingleChildScrollView(
-          child: new Center(
+          child: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -134,7 +217,9 @@ class _MyAppState extends State<MyApp> {
                       controller: _bodyController,
                       maxLines: 10,
                       decoration: const InputDecoration(
-                          labelText: 'Body', border: OutlineInputBorder()),
+                        labelText: 'Body',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                   imagePath,
@@ -151,8 +236,6 @@ class _MyAppState extends State<MyApp> {
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BottomAppBar(
           notchMargin: 4.0,
-          // shape: CircularNotchedRectangle(),
-          // color: Theme.of(context).primaryColor,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
@@ -171,7 +254,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _picker() async {
-    final File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final PickedFile pick =
+        await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       attachment.add(pick.path);
     });
@@ -216,6 +300,7 @@ class _MyAppState extends State<MyApp> {
               children: <Widget>[
                 RaisedButton(
                   color: Theme.of(context).accentColor,
+                  textColor: Theme.of(context).accentTextTheme.button.color,
                   child: const Icon(Icons.save),
                   onPressed: () {
                     final TempFile tempFile =

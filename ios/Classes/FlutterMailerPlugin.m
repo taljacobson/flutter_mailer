@@ -146,36 +146,31 @@ static FlutterResult flutterResult;
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    // NSString *key = RCTKeyForInstance(controller);
-    // RCTResponseSenderBlock callback = _callbacks[key];
-    // if (callback) {
-    //     switch (result) {
-    //         case MFMailComposeResultSent:
-    //             callback(@[[NSNull null] , @"sent"]);
-    //             break;
-    //         case MFMailComposeResultSaved:
-    //             callback(@[[NSNull null] , @"saved"]);
-    //             break;
-    //         case MFMailComposeResultCancelled:
-    //             callback(@[[NSNull null] , @"cancelled"]);
-    //             break;
-    //         case MFMailComposeResultFailed:
-    //             callback(@[@"failed"]);
-    //             break;
-    //         default:
-    //             callback(@[@"error"]);
-    //             break;
-    //     }
-    // [_callbacks removeObjectForKey:key];
-    // } else {
-    //  NSLog(@"No callback registered for mail: %@", controller.title);
-    // }
+
     UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     while (ctrl.presentedViewController && ctrl != controller) {
         ctrl = ctrl.presentedViewController;
     }
-    if (flutterResult) {
-        flutterResult(nil);    
+    if(flutterResult) {
+         switch (result) {
+            case MFMailComposeResultSent:
+                flutterResult(@"sent");
+                break;
+            case MFMailComposeResultSaved:
+                flutterResult( @"saved");
+                break;
+            case MFMailComposeResultCancelled:
+                flutterResult(@"cancelled");
+                break;
+            case MFMailComposeResultFailed:
+                flutterResult(@"failed");
+                break;
+            default:
+                flutterResult(@"unknown");
+                break;
+         }
+    } else {
+        NSLog(@"No callback registered for mail: %@", controller.title);
     }
     [ctrl dismissViewControllerAnimated:YES completion:nil];
 }

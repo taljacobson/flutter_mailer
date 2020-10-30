@@ -5,19 +5,19 @@ version: 0.0.1+01
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.6.7+9
-  path_provider: ^1.6.16
+  image_picker: ^0.6.7+12
+  path_provider: ^1.6.22
   flutter_mailer:
     path: ../
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  e2e: ^0.7.0
+  e2e: ^0.7.0+1
   flutter_driver:
     sdk: flutter
 

@@ -14,6 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool useTempDirectory = true;
   List<String> attachment = <String>[];
   final TextEditingController _subjectController =
       TextEditingController(text: 'the Subject');
@@ -73,25 +74,25 @@ class _MyAppState extends State<MyApp> {
         return;
       }
       await showDialog<void>(
-          context: _scafoldKey.currentContext,
-          builder: (BuildContext context) => AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
-                content: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Message',
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                    Text(error.message),
-                  ],
-                ),
-                contentPadding: const EdgeInsets.all(26),
-                title: Text(error.code),
-              ));
+        context: _scafoldKey.currentContext,
+        builder: (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Message',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(error.message),
+            ],
+          ),
+          contentPadding: const EdgeInsets.all(26),
+          title: Text(error.code),
+        ),
+      );
     } catch (error) {
       platformResponse = error.toString();
     }
@@ -286,14 +287,38 @@ class _MyAppState extends State<MyApp> {
               onChanged: (String str) => fileName = str,
               autofocus: true,
               decoration: const InputDecoration(
-                  suffix: const Text('.txt'), labelText: 'file name'),
+                suffix: const Text('.txt'),
+                labelText: 'file name',
+                alignLabelWithHint: true,
+              ),
             ),
             TextField(
               decoration: const InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
+                alignLabelWithHint: true,
                 labelText: 'Content',
               ),
+              keyboardType: TextInputType.multiline,
               onChanged: (String str) => content = str,
+              maxLines: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  'use Temp directory',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                Switch(
+                  value: useTempDirectory,
+                  onChanged: Platform.isAndroid
+                      ? (bool useTemp) {
+                          setState(() {
+                            useTempDirectory = useTemp;
+                          });
+                        }
+                      : null,
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -317,14 +342,20 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<String> get _localPath async {
+  Future<String> get _tempPath async {
     final Directory directory = await getTemporaryDirectory();
 
     return directory.path;
   }
 
+  Future<String> get _localAppPath async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
   Future<File> _localFile(String fileName) async {
-    final String path = await _localPath;
+    final String path = await (useTempDirectory ? _tempPath : _localAppPath);
     return File('$path/$fileName.txt');
   }
 

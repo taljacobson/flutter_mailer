@@ -1,3 +1,7 @@
+## 1.0.1
+
+* allow the user to attach files from the application documents without having to copy them to the cache first.
+
 ## 1.0.0
 
 * _*[breaking change]*_ `send` method will now return a `Future<MailerResponse>`, #20<br/>

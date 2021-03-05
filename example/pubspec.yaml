@@ -1,23 +1,27 @@
 name: flutter_mailer_example
 description: Demonstrates how to use the flutter_mailer plugin.
 version: 0.0.1+01
+publish_to: none
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.6.7+12
-  path_provider: ^1.6.22
+  image_picker: ^0.7.2
+  path_provider: ^2.0.1
   flutter_mailer:
     path: ../
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  e2e: ^0.7.0+1
+  integration_test: ^1.0.2+2
   flutter_driver:
     sdk: flutter
 

@@ -22,15 +22,14 @@ class _MyAppState extends State<MyApp> {
       text: '''  <em>the body has <code>HTML</code></em> <br><br><br>
   <strong>Some Apps like Gmail might ignore it</strong>
   ''');
-  final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> send() async {
+  Future<void> send(BuildContext context) async {
     if (Platform.isIOS) {
       final bool canSend = await FlutterMailer.canSendMail();
       if (!canSend) {
         const SnackBar snackbar =
             const SnackBar(content: Text('no Email App Available'));
-        _scafoldKey.currentState.showSnackBar(snackbar);
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
         return;
       }
     }
@@ -74,7 +73,7 @@ class _MyAppState extends State<MyApp> {
         return;
       }
       await showDialog<void>(
-        context: _scafoldKey.currentContext,
+        context: context,
         builder: (BuildContext context) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           content: Column(
@@ -86,7 +85,7 @@ class _MyAppState extends State<MyApp> {
                 'Message',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
-              Text(error.message),
+              Text(error.message ?? 'unknown error'),
             ],
           ),
           contentPadding: const EdgeInsets.all(26),
@@ -103,7 +102,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) {
       return;
     }
-    _scafoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(platformResponse),
     ));
   }
@@ -125,7 +124,7 @@ class _MyAppState extends State<MyApp> {
             key: Key(attachment[index]),
             footer: GridTileBar(
               title: Text(
-                file.path.split('/')?.last,
+                file.path.split('/').last,
                 textAlign: TextAlign.justify,
               ),
             ),
@@ -181,16 +180,19 @@ class _MyAppState extends State<MyApp> {
     );
 
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.red),
+      theme: ThemeData.light().copyWith(primaryColor: Colors.red),
+      darkTheme: ThemeData.dark().copyWith(primaryColor: Colors.deepOrange),
+      themeMode: ThemeMode.system,
       home: Scaffold(
-        key: _scafoldKey,
         appBar: AppBar(
           title: const Text('Flutter Mailer Example'),
           actions: <Widget>[
-            IconButton(
-              onPressed: send,
-              icon: const Icon(Icons.send),
-            )
+            Builder(builder: (context) {
+              return IconButton(
+                onPressed: () => send(context),
+                icon: const Icon(Icons.send),
+              );
+            })
           ],
         ),
         body: SingleChildScrollView(
@@ -241,8 +243,10 @@ class _MyAppState extends State<MyApp> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Builder(
-                builder: (BuildContext context) => FlatButton(
-                  textColor: Theme.of(context).primaryColor,
+                builder: (BuildContext context) => TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                  ),
                   child: const Text('add text File'),
                   onPressed: () => _onCreateFile(context),
                 ),
@@ -255,24 +259,28 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _picker() async {
-    final PickedFile pick =
+    final PickedFile? pick =
         await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      attachment.add(pick.path);
-    });
+    if (pick != null) {
+      setState(() {
+        attachment.add(pick.path);
+      });
+    }
   }
 
   /// create a text file in Temporary Directory to share.
   void _onCreateFile(BuildContext context) async {
-    final TempFile tempFile = await _showDialog(context);
-    final File newFile = await writeFile(tempFile.content, tempFile.name);
-    setState(() {
-      attachment.add(newFile.path);
-    });
+    final TempFile? tempFile = await _showDialog(context);
+    if (tempFile != null) {
+      final File newFile = await writeFile(tempFile.content, tempFile.name);
+      setState(() {
+        attachment.add(newFile.path);
+      });
+    }
   }
 
   /// some A simple dialog and return fileName and content
-  Future<TempFile> _showDialog(BuildContext context) {
+  Future<TempFile?> _showDialog(BuildContext context) {
     return showDialog<TempFile>(
       context: context,
       builder: (BuildContext context) {
@@ -323,9 +331,13 @@ class _MyAppState extends State<MyApp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  textColor: Theme.of(context).accentTextTheme.button.color,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).accentColor,
+                    onPrimary:
+                        Theme.of(context).accentTextTheme.button?.color ??
+                            Theme.of(context).accentColor,
+                  ),
                   child: const Icon(Icons.save),
                   onPressed: () {
                     final TempFile tempFile =
@@ -369,6 +381,6 @@ class _MyAppState extends State<MyApp> {
 }
 
 class TempFile {
-  TempFile({this.name, this.content});
+  TempFile({required this.name, required this.content});
   final String name, content;
 }

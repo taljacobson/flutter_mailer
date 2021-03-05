@@ -1,3 +1,11 @@
+## 2.0.0-null-safe
+
+* migrate to null safe
+_set constrants for `sdk: '>=2.12.0 <3.0.0'`_
+
+no breaking changes but [null-safety/migration-guide](https://dart.dev/null-safety/migration-guide#step5-publish) suggest best practice is to up the major version
+
+
 ## 1.0.1
 
 * allow the user to attach files from the application documents without having to copy them to the cache first.

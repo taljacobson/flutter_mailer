@@ -1,6 +1,6 @@
 name: flutter_mailer
 description: Share an email to device Email - Client supports multiple Attachments
-version: 1.0.1
+version: 2.0.0-null-safe
 homepage:  https://github.com/taljacobson/flutter_mailer
 
 dependencies:
@@ -27,4 +27,4 @@ flutter:
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=2.0.0 <3.0.0"
+  flutter: ">=2.0.0"

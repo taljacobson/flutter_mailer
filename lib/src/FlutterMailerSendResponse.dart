@@ -18,7 +18,7 @@ enum MailerResponse {
   unknown,
 }
 
-MailerResponse _sendPlatformResponse(String response) {
+MailerResponse _sendPlatformResponse(String? response) {
   switch (response) {
     case 'sent':
       return MailerResponse.sent;

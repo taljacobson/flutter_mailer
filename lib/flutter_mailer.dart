@@ -28,8 +28,9 @@ class FlutterMailer {
       return false;
     }
 
-    return _channel
-        .invokeMethod('isAppInstalled', <String, String>{'appSchema': schema});
+    return _channel.invokeMethod<bool>('isAppInstalled', <String, String>{
+      'appSchema': schema
+    }).then<bool>((bool? value) => value ?? false);
   }
 
   /// returns true if can MFMailComposeViewController canSendMail is true
@@ -42,6 +43,8 @@ class FlutterMailer {
       return false;
     }
 
-    return _channel.invokeMethod('canSendMail');
+    return _channel
+        .invokeMethod<bool>('canSendMail')
+        .then<bool>((bool? value) => value ?? false);
   }
 }

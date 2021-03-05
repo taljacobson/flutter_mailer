@@ -30,7 +30,7 @@ class MailOptions {
   /// for Gmail on android `com.google.android.gm` or by `MailOptions.GMAIL`
   ///
   /// _android only_
-  final String appSchema;
+  final String? appSchema;
   // ignore: sort_constructors_first
   MailOptions({
     this.subject = '',
@@ -38,13 +38,10 @@ class MailOptions {
     this.ccRecipients = const <String>[],
     this.bccRecipients = const <String>[],
     this.body = '',
-    this.attachments,
+    this.attachments = const <String>[],
     this.isHTML = false,
     this.appSchema,
-  })  : assert(recipients != null),
-        assert(ccRecipients != null),
-        assert(bccRecipients != null),
-        assert(isHTML != null);
+  });
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> map = <String, dynamic>{
@@ -56,14 +53,14 @@ class MailOptions {
       'isHTML': isHTML,
       'appSchema': appSchema,
     };
-    if (appSchema != null && appSchema.isNotEmpty) {
+    if (appSchema != null && appSchema!.isNotEmpty) {
       map['appSchema'] = appSchema;
     }
 
-    if (attachments != null && attachments.isNotEmpty) {
+    if (attachments.isNotEmpty) {
       final List<String> paths = <String>[];
       for (String path in attachments) {
-        if (path != null && path.isNotEmpty) {
+        if (path.isNotEmpty) {
           paths.add(path);
         }
       }

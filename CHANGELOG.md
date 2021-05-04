@@ -1,4 +1,4 @@
-## 2.0.0-null-safe
+## 2.0.0
 
 * migrate to null safe
 _set constrants for `sdk: '>=2.12.0 <3.0.0'`_

@@ -75,7 +75,7 @@ _returns false on [IOS]_
 ```dart
 const GMAIL_SCHEMA = 'com.google.android.gm';
 
-final bool gmailinstalled =  await isAppInstalled(GMAIL_SCHEMA);
+final bool gmailinstalled =  await FlutterMailer.isAppInstalled(GMAIL_SCHEMA);
 
 if(gmailinstalled) {
   final MailOptions mailOptions = MailOptions(
@@ -100,7 +100,7 @@ if none is installed you might want to revert to use [url_launcher](https://pub.
 _returns false on [Android]_
 ```dart
 
-  final bool canSend = await canSendMail();
+  final bool canSend = await FlutterMailer.canSendMail();
 
   if(!canSend && Platform.isIos) {
     final url = 'mailto:$recipient?body=$body&subject=$subject';

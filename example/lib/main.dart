@@ -138,7 +138,7 @@ class _MyAppState extends State<MyApp> {
                       height: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       child: Image.file(
                         File(attachment[index]),
@@ -259,8 +259,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _picker() async {
-    final PickedFile? pick =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+    final pick = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pick != null) {
       setState(() {
         attachment.add(pick.path);
@@ -333,10 +332,8 @@ class _MyAppState extends State<MyApp> {
               children: <Widget>[
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).accentColor,
-                    onPrimary:
-                        Theme.of(context).accentTextTheme.button?.color ??
-                            Theme.of(context).accentColor,
+                    primary: Theme.of(context).colorScheme.secondary,
+                    onPrimary: Theme.of(context).colorScheme.secondary,
                   ),
                   child: const Icon(Icons.save),
                   onPressed: () {

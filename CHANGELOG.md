@@ -1,3 +1,7 @@
+## 2.0.1
+
+* [Android]  Migrate maven repository from jcenter to mavenCentral
+
 ## 2.0.0
 
 * migrate to null safe

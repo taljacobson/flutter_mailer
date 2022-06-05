@@ -85,6 +85,23 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
             } else {
                 result.success(false);
             }
+        } else if(call.method.equals("getApplicatons")) {
+            try {
+                List<String> packages = new ArrayList<>();
+                final Intent intent = mail(call);
+                List<ResolveInfo> resolveInfoList = context.getPackageManager().queryIntentActivities(intent, 0);
+
+                for (ResolveInfo resolveInfo : resolveInfoList) {
+                    packages.add(resolveInfo.activityInfo.packageName);
+                }
+                result.success(packages);
+            } catch (FlutterMailerException e) {
+                result.error(e.errorCode, e.errorMessage, e.errorDetails);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                result.error("UNKNOWN", e.getMessage(), null);
+            }
+            
         } else {
             result.notImplemented();
         }

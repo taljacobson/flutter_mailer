@@ -250,12 +250,65 @@ class _MyAppState extends State<MyApp> {
                   child: const Text('add text File'),
                   onPressed: () => _onCreateFile(context),
                 ),
-              )
+              ),
+              if (Platform.isAndroid)
+                Builder(
+                  builder: (BuildContext context) => TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                    ),
+                    child: const Text('get apps'),
+                    onPressed: () => _getAppsDrawer(context),
+                  ),
+                )
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _getAppsDrawer(BuildContext context) async {
+    final MailOptions mailOptions = MailOptions(
+      body: _bodyController.text,
+      subject: _subjectController.text,
+      recipients: <String>['example@example.com'],
+      isHTML: true,
+      // bccRecipients: ['other@example.com'],
+      ccRecipients: <String>['third@example.com'],
+      attachments: attachment,
+    );
+    final List<String> apps = await FlutterMailer.getApplications(mailOptions);
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: ListView.builder(
+              itemCount: apps.length,
+              itemBuilder: (BuildContext context, int index) {
+                final MailOptions mailOptions = MailOptions(
+                  appSchema: apps[index], body: _bodyController.text,
+                  subject: _subjectController.text,
+                  recipients: <String>['example@example.com'],
+                  isHTML: true,
+                  // bccRecipients: ['other@example.com'],
+                  ccRecipients: <String>['third@example.com'],
+                  attachments: attachment,
+                );
+                return ListTile(
+                  title: Text(apps[index]),
+                  onTap: () async {
+                    await FlutterMailer.send(mailOptions).then((value) {
+                      print(value);
+                    });
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            ),
+          );
+        });
   }
 
   void _picker() async {

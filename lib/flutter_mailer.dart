@@ -48,15 +48,17 @@ class FlutterMailer {
         .then<bool>((bool? value) => value ?? false);
   }
 
-
   /// returns a list of application on the device that can handle the email intent
   ///
   /// ### _ANDROID only_
-  static Future<List<String>> getApplications(MailOptions mailOptions) {
+  static getApplications(MailOptions mailOptions) async {
     if (!Platform.isAndroid) {
-      return List<String>[];
+      return <String>[];
     }
-    return _channel.invokeMethod<List<String>>('getApplicatons', mailOptions.toJson())
-          .then<List<String>>((List<String>? value) => value ?? List<String>[]);
+    final List<String> response = await _channel
+        .invokeMethod<dynamic>('getApplicatons', mailOptions.toJson())
+        .then((value) =>
+            (value ?? []).map<String>((dynamic v) => v.toString()).toList());
+    return response;
   }
 }

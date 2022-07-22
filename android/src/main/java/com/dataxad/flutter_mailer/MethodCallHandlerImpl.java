@@ -157,9 +157,14 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
                 }
 
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE)
-                        .setType("message/rfc822")
+                        .setType(null) // if we're using a selector, then clear the type to null
                         .putExtra(Intent.EXTRA_STREAM, uris)
                         .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                // restrict to just mail apps
+                final Intent restrictIntent = new Intent(Intent.ACTION_SENDTO);
+                restrictIntent.setData(Uri.parse(MAILTO_SCHEME));
+                intent.setSelector(restrictIntent);
             }
         }
 

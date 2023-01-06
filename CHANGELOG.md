@@ -1,3 +1,7 @@
+## 2.0.2
+
+* [Android]  fix [issue #47](https://github.com/taljacobson/flutter_mailer/issues/47) on some devices crashes already emitted a result.
+
 ## 2.0.1
 
 * [Android]  Migrate maven repository from jcenter to mavenCentral

@@ -1,3 +1,9 @@
+## 2.0.4
+  [Android] revert [Update AGP, Compile SDK Version and Gradle](https://github.com/taljacobson/flutter_mailer/pull/54) due to [issue #55](https://github.com/taljacobson/flutter_mailer/issues/47)
+
+## 2.0.3
+  [Android] update [Update AGP, Compile SDK Version and Gradle](https://github.com/taljacobson/flutter_mailer/pull/54)
+
 ## 2.0.2
 
 * [Android]  fix [issue #47](https://github.com/taljacobson/flutter_mailer/issues/47) on some devices crashes already emitted a result.

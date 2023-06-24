@@ -1,5 +1,8 @@
+## 2.1.0
+  [Android] republish 2.0.3 [issue #55](https://github.com/taljacobson/flutter_mailer/issues/47) do to increased minSdkVersion
+
 ## 2.0.4
-  [Android] revert [Update AGP, Compile SDK Version and Gradle](https://github.com/taljacobson/flutter_mailer/pull/54) due to [issue #55](https://github.com/taljacobson/flutter_mailer/issues/47)
+  [Android] revert + retract from pub dev  [Update AGP, Compile SDK Version and Gradle](https://github.com/taljacobson/flutter_mailer/pull/54) due to [issue #55](https://github.com/taljacobson/flutter_mailer/issues/47)
 
 ## 2.0.3
   [Android] update [Update AGP, Compile SDK Version and Gradle](https://github.com/taljacobson/flutter_mailer/pull/54)

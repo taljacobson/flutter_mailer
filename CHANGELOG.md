@@ -1,5 +1,9 @@
+## 2.1.2
+  [Android] Fix AGP 8.x namespace declaration
+
 ## 2.1.1
   [Android] set minSDKVersion back to 16
+
 ## 2.1.0
   [Android] republish 2.0.3 [issue #55](https://github.com/taljacobson/flutter_mailer/issues/47) do to increased minSdkVersion
 

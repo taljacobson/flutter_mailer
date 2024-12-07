@@ -16,10 +16,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool useTempDirectory = true;
   List<String> attachment = <String>[];
-  final TextEditingController _subjectController =
-      TextEditingController(text: 'the Subject');
-  final TextEditingController _bodyController = TextEditingController(
-      text: '''  <em>the body has <code>HTML</code></em> <br><br><br>
+  final TextEditingController _subjectController = TextEditingController(text: 'the Subject');
+  final TextEditingController _bodyController =
+      TextEditingController(text: '''  <em>the body has <code>HTML</code></em> <br><br><br>
   <strong>Some Apps like Gmail might ignore it</strong>
   ''');
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -27,8 +26,7 @@ class _MyAppState extends State<MyApp> {
     if (Platform.isIOS) {
       final bool canSend = await FlutterMailer.canSendMail();
       if (!canSend) {
-        const SnackBar snackbar =
-            const SnackBar(content: Text('no Email App Available'));
+        const SnackBar snackbar = const SnackBar(content: Text('no Email App Available'));
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
         return;
       }
@@ -81,10 +79,7 @@ class _MyAppState extends State<MyApp> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                'Message',
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+              Text('Message'),
               Text(error.message ?? 'unknown error'),
             ],
           ),
@@ -244,9 +239,6 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               Builder(
                 builder: (BuildContext context) => TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                  ),
                   child: const Text('add text File'),
                   onPressed: () => _onCreateFile(context),
                 ),
@@ -311,10 +303,7 @@ class _MyAppState extends State<MyApp> {
             ),
             Row(
               children: [
-                Text(
-                  'use Temp directory',
-                  style: Theme.of(context).textTheme.caption,
-                ),
+                Text('use Temp directory'),
                 Switch(
                   value: useTempDirectory,
                   onChanged: Platform.isAndroid
@@ -331,14 +320,9 @@ class _MyAppState extends State<MyApp> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.secondary,
-                    onPrimary: Theme.of(context).colorScheme.secondary,
-                  ),
                   child: const Icon(Icons.save),
                   onPressed: () {
-                    final TempFile tempFile =
-                        TempFile(content: content, name: fileName);
+                    final TempFile tempFile = TempFile(content: content, name: fileName);
                     // Map.from({'content': content, 'fileName': fileName});
                     Navigator.of(context).pop<TempFile>(tempFile);
                   },

@@ -19,13 +19,6 @@ public class FlutterMailerPlugin implements FlutterPlugin, ActivityAware {
     private @Nullable
     ActivityPluginBinding activityBinding;
 
-    public static void registerWith(PluginRegistry.Registrar registrar) {
-        final FlutterMailerPlugin plugin = new FlutterMailerPlugin();
-        final MethodCallHandlerImpl methodCallHandler = new MethodCallHandlerImpl(registrar.context(), registrar.activity());
-        registrar.addActivityResultListener(methodCallHandler);
-        plugin.setupChannel(registrar.messenger(), methodCallHandler);
-    }
-
     @Override
     public void onAttachedToEngine(FlutterPluginBinding binding) {
         final MethodCallHandlerImpl methodCallHandler = new MethodCallHandlerImpl(binding.getApplicationContext(), null);

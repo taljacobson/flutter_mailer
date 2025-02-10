@@ -1,3 +1,9 @@
+## 3.0.0
+  [Android] update constaints AGP. 
+            remove registerWith java code. 
+            update minSDK version needed. this is the main breaking change which required a major version bump.
+  [Example] example updated
+
 ## 2.1.2
   [Android] Fix AGP 8.x namespace declaration
 

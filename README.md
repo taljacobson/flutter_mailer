@@ -21,7 +21,7 @@ Add to your pubspec dependencies, like so:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_mailer: ^2.0.0
+  flutter_mailer: ^3.0.0
 
 ```
 Instantiate mail options as [follows](https://github.com/JaysQubeXon/flutter_mailer/blob/master/example/lib/main.dart#L29):

@@ -1,3 +1,9 @@
+### 3.0.2
+  [Android] Fix false "no email Managers available" when sending without attachments on Android 11+ by removing
+           PackageManager pre-query for ACTION_SENDTO and launching intent directly
+  [Example] Migrate Android build to Flutter's declarative Gradle plugin (dev.flutter.flutter-plugin-loader /
+           dev.flutter.flutter-gradle-plugin), update to Android compileSdk 36, and migrate embedding to v2.
+
 ### 3.0.1
   [root] add analysis options
   [test] remove usage of deprecated `setMockMethodCallHandler` in tests

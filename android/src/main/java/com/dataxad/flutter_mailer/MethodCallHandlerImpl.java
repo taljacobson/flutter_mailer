@@ -4,8 +4,8 @@ package com.dataxad.flutter_mailer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ActivityNotFoundException;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 
 import android.net.Uri;
 import android.os.Build;
@@ -70,7 +70,12 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
             mResult = result;
             try {
                 final Intent intent = mail(call);
-                activity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
+                try {
+                    activity.startActivityForResult(intent, MAIL_ACTIVITY_REQUEST_CODE);
+                } catch (ActivityNotFoundException e) {
+                    result.error("not_available", "no email Managers available", null);
+                    mResult = null;
+                }
             } catch (FlutterMailerException e) {
                 result.error(e.errorCode, e.errorMessage, e.errorDetails);
                 mResult = null;
@@ -164,20 +169,13 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler, PluginRe
             }
         }
 
-        PackageManager manager = context.getPackageManager();
-        List<ResolveInfo> list = manager.queryIntentActivities(intent, 0);
-
-        if (list == null || list.size() == 0) {
-            Log.e(TAG, "size is null or Zero");
-            throw new FlutterMailerException("not_available", "no email Managers available", null);
-        }
-
-        if (list.size() == 1) {
-            return intent;
-        } else if (options.hasArgument(APP_SCHEMA) && options.argument(APP_SCHEMA) != null && isAppInstalled((String) options.argument(APP_SCHEMA))) {
+        // If a specific package schema is requested, set it directly and let the system
+        // resolve it; avoid pre-querying PackageManager to keep compatibility with
+        // Android 11+ package visibility restrictions.
+        if (options.hasArgument(APP_SCHEMA) && options.argument(APP_SCHEMA) != null) {
             intent.setPackage((String) options.argument(APP_SCHEMA));
-            return intent;
         }
+
         return intent;
     }
 

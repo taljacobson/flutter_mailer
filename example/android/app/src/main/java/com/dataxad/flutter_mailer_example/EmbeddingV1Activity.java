@@ -5,7 +5,7 @@ package com.dataxad.flutter_mailer_example;
 // import dev.flutter.plugins.integration_test.IntegrationTestPlugin;
 // import io.flutter.plugins.imagepicker.ImagePickerPlugin;
 // import io.flutter.plugins.pathprovider.PathProviderPlugin;
-import io.flutter.app.FlutterActivity;
+import io.flutter.embedding.android.FlutterActivity;
 
 public class EmbeddingV1Activity extends FlutterActivity {
   // @Override

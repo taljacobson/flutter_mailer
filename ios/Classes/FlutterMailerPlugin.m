@@ -118,7 +118,7 @@ static FlutterResult flutterResult;
                 }
             }
             
-            UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+            UIViewController *root = [self rootViewController];
             
             while (root.presentedViewController) {
                 root = root.presentedViewController;
@@ -141,13 +141,38 @@ static FlutterResult flutterResult;
     }
 }
 
+- (UIViewController *)rootViewController {
+    UIViewController *rootViewController = nil;
+
+    NSSet<UIScene *> *connectedScenes = [UIApplication sharedApplication].connectedScenes;
+    for (UIScene *scene in connectedScenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            for (UIWindow *window in windowScene.windows) {
+                if (window.isKeyWindow) {
+                    rootViewController = window.rootViewController;
+                    break;
+                }
+            }
+        }
+
+        if (rootViewController) {
+            break;
+        }
+    }
+    
+    if (rootViewController == nil) {
+        rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    }
+
+    return rootViewController;
+}
 
 #pragma mark MFMailComposeViewControllerDelegate Methods
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-
-    UIViewController *ctrl = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    UIViewController *ctrl = [self rootViewController];
     while (ctrl.presentedViewController && ctrl != controller) {
         ctrl = ctrl.presentedViewController;
     }

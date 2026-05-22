@@ -1,7 +1,10 @@
 part of '../flutter_mailer.dart';
 
 class MailOptions {
+  @Deprecated('Use MailOptions.gmailSchema instead')
+  // ignore: constant_identifier_names
   static const String GMAIL = 'com.google.android.gm';
+  static const String gmailSchema = 'com.google.android.gm';
 
   /// Email Subject field
   final String subject;
@@ -27,11 +30,10 @@ class MailOptions {
   ///
   /// this can be used to step over App choser sheet when sending an email with attachments.
   ///
-  /// for Gmail on android `com.google.android.gm` or by `MailOptions.GMAIL`
+  /// for Gmail on android `com.google.android.gm` or by `MailOptions.gmailSchema`
   ///
   /// _android only_
   final String? appSchema;
-  // ignore: sort_constructors_first
   MailOptions({
     this.subject = '',
     this.recipients = const <String>[],

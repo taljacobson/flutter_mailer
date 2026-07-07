@@ -1,4 +1,4 @@
-#import "FlutterMailerPlugin.h"
+#import "./include/flutter_mailer/FlutterMailerPlugin.h"
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 

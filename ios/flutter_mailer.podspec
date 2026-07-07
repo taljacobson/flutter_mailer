@@ -12,10 +12,9 @@ A new flutter plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
-  s.public_header_files = 'Classes/**/*.h'
+  s.source_files = 'flutter_mailer/Sources/flutter_mailer/**/*.{h,m}'
+  s.public_header_files = 'flutter_mailer/Sources/flutter_mailer/include/**/*.h'
   s.dependency 'Flutter'
-  
-  s.ios.deployment_target = '8.0'
+  s.platform = :ios, '13.0'
 end
 

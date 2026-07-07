@@ -1,3 +1,6 @@
+### Unreleased
+  [iOS] add Swift Package Manager support while keeping CocoaPods compatibility
+
 ### 3.0.2
   [IOS] fix [Cannot access the rootViewController when using a SceneDelegate Issue 68](https://github.com/taljacobson/flutter_mailer/issues/68) [PR 71](https://github.com/taljacobson/flutter_mailer/pull/71)
   [lib] deprecate `MailOptions.GMAIL` in favor of `MailOptions.gmailSchema`

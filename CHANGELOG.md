@@ -1,4 +1,4 @@
-### Unreleased
+### 3.0.3
   [iOS] add Swift Package Manager support while keeping CocoaPods compatibility
 
 ### 3.0.2
